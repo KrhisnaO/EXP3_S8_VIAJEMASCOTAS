@@ -3,68 +3,79 @@
 # Microservicio de gestión de información de usuarios
 Este es un microservicio simple desarrollado con Spring Boot, que permite interactuar con una base de datos Oracle para gestionar información de usuarios en una aplicación de viajes con mascotas.
 
-## Características
+## Características principales
 
-- Base de datos en **Oracle**.
-- **CRUD** de películas: almacenamiento y consulta de viajes con mascotas.
-- **Rutas REST** disponibles:
-  - `GET /usuarios/{id}`: Obtiene los detalles de un usuario por su ID.
-  - `GET /usuarios`: Obtiene la lista de todas los usuarios.
-  - `POST /usuarios`: Crea un nuevo usuario.
-  - `PUT /usuarios/{id}`: Actualiza los detalles de un usuario por su ID.
-  - `DELETE /usuarios/{id}`: Elimina un usuario por su ID.
+✅ CRUD completo de usuarios  
+✅ Base de datos en **Oracle**  
+✅ API documentada con **HATEOAS** (hipervínculos en las respuestas)  
+✅ **2 pruebas unitarias** desarrolladas con **JUnit 5**  
+✅ Despliegue en **Docker** mediante **docker-compose** y ejecución en **Play With Docker**
 
-## Requisitos
+---
 
-- **Java 17** o superior.
-- **Spring Boot 2.x** o superior.
-- **Oracle Database** (con Wallet configurado).
-- **Maven** como gestor de dependencias.
+## Endpoints disponibles
 
-## Configuración de la Base de Datos
+| Método | Ruta                    | Descripción                     |
+|--------|------------------------|--------------------------------|
+| GET    | /usuarios/{id}          | Obtiene un usuario por ID       |
+| GET    | /usuarios               | Lista todos los usuarios        |
+| POST   | /usuarios               | Crea un nuevo usuario           |
+| PUT    | /usuarios/{id}          | Actualiza un usuario existente  |
+| DELETE | /usuarios/{id}          | Elimina un usuario por ID       |
 
-### Configuración de Oracle Wallet
+> 📝 Las respuestas incluyen enlaces HATEOAS como `_links.self`, `_links.update`, etc.
 
-1. Descarga el Oracle Wallet desde la consola de Oracle Cloud.
-2. Coloca el archivo `tnsnames.ora` y las credenciales del Wallet en la carpeta especificada en la configuración de la base de datos, como se muestra a continuación:
-   
-   ```properties
-   spring.datasource.url=jdbc:oracle:thin:@bbddfs_tp?TNS_ADMIN=/path/to/Wallet
+## Pruebas unitarias
 
-### El microservicio estará disponible en http://localhost:8080.
+✔️ Se integró `spring-boot-starter-test` en el proyecto.  
+✔️ Se configuraron las anotaciones `@Test`, `@BeforeEach`, `@AfterEach` en los test.  
+✔️ Se desarrollaron **pruebas unitarias básicas**:
+1. Validación de creación de usuario.
+2. Validación de error en caso de datos inválidos.
 
-## Uso
+Las pruebas se ejecutan con:
 
-1. Obtener usuarios por ID:
-Realiza una solicitud GET a la siguiente URL para obtener los detalles de un usuario usando su ID:
+```bash
+mvn clean install -DskipTests
+```
 
-GET http://localhost:8080/usuarios/{id}
+## Cómo ejecutar en Docker Lab
 
-Ejemplo:
+1. Entrar a Play With Docker
+- Ir a  https://labs.play-with-docker.com/
+- Iniciar sesión con cuenta de Docker Hub
+- Crear una instancia
 
-GET http://localhost:8080/usuarios/1
+2. Clonar el repositorio desde GitHub
 
-3. Obtener todos los usuarios:
-Realiza una solicitud GET a la siguiente URL para obtener la lista de todos los usuarios registrados en la base de datos:
+En la terminal de la instancia:
 
-GET http://localhost:8080/usuarios
+```bash
+git clone https://github.com/KrhisnaO/EXP3_S8_VIAJEMASCOTAS.git
+ls
+cd EXP3_S8_VIAJEMASCOTAS
+```
 
-5. Crear un nuevo usuario
+3. Construir y levantar los contenedores
 
-POST http://localhost:8080/usuarios
+Ejecuta:
 
-8. Actualizar un usuario existente:
+```bash
+docker-compose up
+```
 
-PUT http://localhost:8080/usuarios/{id}
+Esto descargará las imágenes necesarias, construirá la aplicación y levantará los servicios.
 
-Ejemplo:
+🔗 Al finalizar, Docker Lab te mostrará una URL pública (parecida a http://ip172-18-0-...direct.labs.play-with-docker.com:8080).
 
-PUT http://localhost:8080/usuarios/1
+👉 IMPORTANTE: añade /usuarios al final de esa URL para acceder al endpoint inicial.
 
-10. Eliminar un usuario:
-    
-DELETE http://localhost:8080/usuarios/{id}
+4. Probar en Postman
 
-Ejemplo:
+- Copia la URL pública generada
+- Abre Postman
+- Usa la URL para probar los endpoints GET, POST, PUT, DELETE.
 
-DELETE http://localhost:8080/usuarios/1
+Ejemplo (GET todos los usuarios):
+
+GET http://ip172-18-0-...direct.labs.play-with-docker.com:8080/usuarios
